@@ -16,6 +16,7 @@ class BackgroundCard extends LitElement {
       error: { type: String },
       debugInfo: { type: Object },
       isTransitioning: { type: Boolean },
+      showDebugInfo: { type: Boolean },
     };
   }
 
@@ -34,6 +35,7 @@ class BackgroundCard extends LitElement {
     this.urlTemplate = "";
     this.boundUpdateScreenSize = this.updateScreenSize.bind(this);
     this.isTransitioning = false;
+    this.showDebugInfo = false;
     this.updateScreenSize();
   }
 
@@ -48,9 +50,11 @@ class BackgroundCard extends LitElement {
       image_fit: "cover",
       image_list_update_interval: 3600,
       image_order: "sorted",
+      show_debug: false,
       ...config,
     };
     this.urlTemplate = this.config.image_url;
+    this.showDebugInfo = this.config.show_debug;
     this.debugInfo.config = this.config;
     console.log("Config set:", this.config);
   }
@@ -364,22 +368,24 @@ class BackgroundCard extends LitElement {
       <div class="background-image" style="background-image: url('${this.imageA}'); opacity: ${imageAOpacity};"></div>
       <div class="background-image" style="background-image: url('${this.imageB}'); opacity: ${imageBOpacity};"></div>
       ${this.error ? html`<div class="error">${this.error}</div>` : ''}
-      <div class="debug-info">
-        <h2>Background Card Debug Info</h2>
-        <h3>Background Card Version: 15</h3>
-        <p><strong>Screen Width:</strong> ${this.screenWidth}</p>
-        <p><strong>Screen Height:</strong> ${this.screenHeight}</p>
-        <p><strong>Device Pixel Ratio:</strong> ${window.devicePixelRatio || 1}</p>
-        <p><strong>Image A:</strong> ${this.imageA}</p>
-        <p><strong>Image B:</strong> ${this.imageB}</p>
-        <p><strong>Active Image:</strong> ${this.activeImage}</p>
-        <p><strong>Preloaded Image:</strong> ${this.preloadedImage}</p>
-        <p><strong>Is Transitioning:</strong> ${this.isTransitioning}</p>
-        <p><strong>Image List:</strong> ${JSON.stringify(this.imageList)}</p>
-        <p><strong>Error:</strong> ${this.error}</p>
-        <h3>Config:</h3>
-        <pre>${JSON.stringify(this.config, null, 2)}</pre>
-      </div>
+      ${this.showDebugInfo ? html`
+        <div class="debug-info">
+          <h2>Background Card Debug Info</h2>
+          <h3>Background Card Version: 16</h3>
+          <p><strong>Screen Width:</strong> ${this.screenWidth}</p>
+          <p><strong>Screen Height:</strong> ${this.screenHeight}</p>
+          <p><strong>Device Pixel Ratio:</strong> ${window.devicePixelRatio || 1}</p>
+          <p><strong>Image A:</strong> ${this.imageA}</p>
+          <p><strong>Image B:</strong> ${this.imageB}</p>
+          <p><strong>Active Image:</strong> ${this.activeImage}</p>
+          <p><strong>Preloaded Image:</strong> ${this.preloadedImage}</p>
+          <p><strong>Is Transitioning:</strong> ${this.isTransitioning}</p>
+          <p><strong>Image List:</strong> ${JSON.stringify(this.imageList)}</p>
+          <p><strong>Error:</strong> ${this.error}</p>
+          <h3>Config:</h3>
+          <pre>${JSON.stringify(this.config, null, 2)}</pre>
+        </div>
+      ` : ''}
     `;
   }
 }
